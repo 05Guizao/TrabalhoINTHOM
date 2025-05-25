@@ -1,0 +1,31 @@
+<ion-content class="login-content">
+  <div class="container">
+    <!-- Espaço reservado para o logotipo -->
+    <div class="logo-placeholder"></div>
+
+    <h2 class="titulo">DIGITALALLMEDIA</h2>
+    <p class="subtitulo">O TEU ÁLBUM DIGITAL</p>
+
+    <ion-input
+      placeholder="Digite o seu e-mail"
+      type="email"
+      class="input-field"
+      fill="outline"
+    ></ion-input>
+
+    <ion-input
+      placeholder="Digite a sua palavra-passe"
+      type="password"
+      class="input-field"
+      fill="outline"
+    ></ion-input>
+
+    <ion-button expand="block" class="btn-login" (click)="iniciarSessao()">
+  Iniciar Sessão
+</ion-button>
+
+    <div class="divider"></div>
+
+    <ion-button expand="block" class="btn-register" fill="clear" routerLink="/registo">Criar nova conta </ion-button>
+  </div>
+</ion-content>
