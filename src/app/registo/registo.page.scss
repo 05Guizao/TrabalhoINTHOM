@@ -1,0 +1,51 @@
+:host {
+  --ion-background-color: #ffffff !important;
+}
+
+ion-header,
+ion-toolbar {
+  --background: #ffffff;
+  --color: #000000;
+}
+
+.login-content {
+  background: #ffffff !important;
+  --background: #ffffff !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  width: 90%;
+  max-width: 400px;
+  margin: auto;
+  text-align: center;
+  color: #787878;
+}
+
+.logo-placeholder {
+  height: 100px;
+  margin-bottom: 20px;
+}
+
+.titulo {
+  font-weight: bold;
+  font-size: 1.3rem;
+  color: #000;
+  margin-bottom: 30px;
+}
+
+.input-field {
+  margin-bottom: 15px;
+}
+
+ion-input {
+  color: #000;
+}
+
+.btn-register {
+  --background: #3b2b10;
+  --color: white;
+  margin-top: 20px;
+}
