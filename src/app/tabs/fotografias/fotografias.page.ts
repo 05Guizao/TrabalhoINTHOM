@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AlertController } from '@ionic/angular';
+import { Router } from '@angular/router';
 
 import {
   Camera,
@@ -33,6 +34,9 @@ export class FotografiasPage implements OnInit {
     'assets/photos/senhora1.jpeg',
   ];
 
+  isMenuOpen = false;
+  popoverEvent: any;
+
   ngOnInit() {}
 
   openImage(imageSrc: string) {
@@ -65,7 +69,7 @@ export class FotografiasPage implements OnInit {
   }
 
 
-constructor(private alertController: AlertController) {}
+constructor(private alertController: AlertController, private router: Router) {}
 
 async confirmarApagar(event: Event) {
   event.stopPropagation(); // Impede que o clique feche a imagem
@@ -92,6 +96,16 @@ async confirmarApagar(event: Event) {
 deleteImage() {
   this.photos = this.photos.filter(p => p !== this.selectedImage);
   this.selectedImage = null;
+}
+
+openMenu(ev: Event) {
+  this.popoverEvent = ev;
+  this.isMenuOpen = true;
+}
+
+goToMapa() {
+  this.isMenuOpen = false;
+  this.router.navigate(['/mapa']);
 }
 
 }

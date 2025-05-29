@@ -1,0 +1,11 @@
+/* Garante que o mapa ocupa 100 % do ecrã */
+ion-content,
+.map-container,
+#map {
+  height: 100%;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}

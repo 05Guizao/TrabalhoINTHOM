@@ -2,12 +2,21 @@
   <ion-toolbar>
     <ion-title size="medium">Fotografias</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="adicionarFoto()">
-        <ion-icon slot="icon-only" name="add-outline"></ion-icon>
+      <ion-button (click)="openMenu($event)">
+        <ion-icon slot="icon-only" name="ellipsis-vertical-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
+
+<ion-popover [isOpen]="isMenuOpen" [event]="popoverEvent" (didDismiss)="isMenuOpen = false">
+  <ng-template>
+    <ion-list>
+      <ion-item button (click)="adicionarFoto(); isMenuOpen = false">Adicionar Foto</ion-item>
+      <ion-item button (click)="goToMapa(); isMenuOpen = false">Ir para o Mapa</ion-item>
+    </ion-list>
+  </ng-template>
+</ion-popover>
 
 <ion-content [fullscreen]="false" class="ion-padding">
 
