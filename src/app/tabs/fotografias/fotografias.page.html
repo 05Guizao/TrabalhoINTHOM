@@ -1,13 +1,37 @@
-<ion-header [translucent]="true">
+<ion-header *ngIf="!selectedImage">
   <ion-toolbar>
-    <ion-title>Fotografias</ion-title>
+    <ion-title size="medium">Fotografias</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="adicionarFoto()">
+        <ion-icon slot="icon-only" name="add-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Fotografias</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content [fullscreen]="false" class="ion-padding">
+
+  <div class="photo-grid">
+    <img
+      *ngFor="let photo of photos"
+      [src]="photo"
+      (click)="openImage(photo)"
+      alt="Foto da galeria"
+    />
+  </div>
+
+  <div class="fullscreen-overlay" *ngIf="selectedImage" (click)="closeImage()">
+    <img [src]="selectedImage" alt="Imagem em fullscreen" (click)="$event.stopPropagation()">
+  
+    <div class="footer" (click)="$event.stopPropagation()">
+      <ion-button fill="clear" color="danger" (click)="confirmarApagar($event)">
+        <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+      </ion-button>
+    </div>
+  </div>
+  
+  
+  
 </ion-content>
+
+

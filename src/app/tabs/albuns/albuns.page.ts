@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NavController } from '@ionic/angular';
 
 @Component({
   standalone: false,
@@ -8,9 +9,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AlbunsPage implements OnInit {
 
-  constructor() { }
+  constructor(private navCtrl: NavController) { }
 
   ngOnInit() {
+  }
+  
+  RouteCriarAlbum(){
+    this.navCtrl.navigateForward('/criar-album');
   }
 
 }

@@ -1,13 +1,14 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
     <ion-title>Álbuns</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="RouteCriarAlbum()">
+        <ion-icon slot="icon-only" name="add-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Álbuns</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <!-- conteúdo da lista de álbuns -->
 </ion-content>
