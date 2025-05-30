@@ -1,111 +1,105 @@
 import { Component, OnInit } from '@angular/core';
-import { AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
+import { AlertController } from '@ionic/angular';
+import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
+import { PhotoService } from '../../services/photo.service';      // << NOVO
 
-import {
-  Camera,
-  CameraResultType,
-  CameraSource,
-  // removi CameraPhoto pois está deprecated
-} from '@capacitor/camera';
+interface GalleryPhoto {
+  url: string;   // URL assinado
+  path: string;  // caminho real no bucket → para apagar ou reutilizar
+}
 
 @Component({
-  standalone: false,
   selector: 'app-fotografias',
   templateUrl: './fotografias.page.html',
   styleUrls: ['./fotografias.page.scss'],
+  standalone: false,
 })
 export class FotografiasPage implements OnInit {
 
-  
+  photos: GalleryPhoto[] = [];          // já não é string[]
   selectedImage: string | null = null;
-
-  photos: string[] = [
-    'assets/photos/cao.jpeg',
-    'assets/photos/cao2.jpeg',
-    'assets/photos/escritorio.jpeg',
-    'assets/photos/floresta.jpeg',
-    'assets/photos/livros.jpeg',
-    'assets/photos/mar.jpeg',
-    'assets/photos/montanhas.jpeg',
-    'assets/photos/moradia.jpeg',
-    'assets/photos/rio.jpeg',
-    'assets/photos/senhora.jpeg',
-    'assets/photos/senhora1.jpeg',
-  ];
 
   isMenuOpen = false;
   popoverEvent: any;
 
-  ngOnInit() {}
+  constructor(
+    private alertController: AlertController,
+    private router: Router,
+    private photosSvc: PhotoService        
+  ) {}
 
-  openImage(imageSrc: string) {
-    this.selectedImage = imageSrc;
+  ngOnInit() {
+  this.syncPhotos();   
   }
-  
+  ionViewWillEnter() { this.syncPhotos(); }
+
+
+  /** Vai à BD, traz tudo e preenche o array */
+  async syncPhotos() {
+    this.photos = await this.photosSvc.list();
+  }
+
+
+  /** Abre a foto em fullscreen */
+  openImage(src: string) {
+    this.selectedImage = src;
+  }
+
   closeImage() {
     this.selectedImage = null;
   }
 
+  /** Tira da galeria do dispositivo, faz upload, grava meta na BD */
   async adicionarFoto() {
-    try {
-      const image = await Camera.getPhoto({
-        quality: 80,
-        allowEditing: false,
-        resultType: CameraResultType.DataUrl,
-        source: CameraSource.Photos,
-      });
+    const image = await Camera.getPhoto({
+      quality: 80,
+      resultType: CameraResultType.DataUrl,
+      source: CameraSource.Photos
+    });
 
-      if ('dataUrl' in image && image.dataUrl) {
-        this.photos.push(image.dataUrl);
-      } else {
-        console.error('Imagem selecionada não possui dataUrl:', image);
-      }
+    // converte dataUrl → Blob → File
+    const res  = await fetch(image.dataUrl!);
+    const blob = await res.blob();
+    const file = new File([blob], `foto_${Date.now()}.jpeg`, { type: blob.type });
 
-      console.log('Foto selecionada:', image);
-    } catch (error) {
-      console.error('Erro ao aceder às fotos:', error);
-    }
+    // guarda na Storage + BD
+    const path     = await this.photosSvc.upload(file);
+    const signedUrl = await this.photosSvc.signedUrl(path);
+
+    // mete na grelha
+    this.photos.push({ url: signedUrl, path });
   }
 
+  /** Confirmação antes de apagar localmente (opcional: podes também apagar do Supabase) */
+  async confirmarApagar(event: Event) {
+    event.stopPropagation();
+    const alert = await this.alertController.create({
+      header: 'Apagar Fotografia',
+      message: 'Tens a certeza que queres apagar esta fotografia?',
+      buttons: [
+        { text: 'Cancelar', role: 'cancel' },
+        { text: 'Apagar', handler: () => this.deleteImage() }
+      ]
+    });
+    await alert.present();
+  }
 
-constructor(private alertController: AlertController, private router: Router) {}
+  deleteImage() {
+    this.photos = this.photos.filter(p => p.url !== this.selectedImage);
+    this.selectedImage = null;
+    // Se quiseres mesmo apagar do bucket/BD:
+    // await this.photosSvc.delete(path);
+  }
 
-async confirmarApagar(event: Event) {
-  event.stopPropagation(); // Impede que o clique feche a imagem
+  /* popover */
+  openMenu(ev: Event) {
+    this.popoverEvent = ev;
+    this.isMenuOpen = true;
+  }
 
-  const alert = await this.alertController.create({
-    header: 'Apagar Fotografia',
-    message: 'Tens a certeza que queres apagar esta fotografia?',
-    buttons: [
-      {
-        text: 'Cancelar',
-        role: 'cancel',
-        cssClass: 'secondary'
-      },
-      {
-        text: 'Apagar',
-        handler: () => this.deleteImage()
-      }
-    ]
-  });
-
-  await alert.present();
-}
-
-deleteImage() {
-  this.photos = this.photos.filter(p => p !== this.selectedImage);
-  this.selectedImage = null;
-}
-
-openMenu(ev: Event) {
-  this.popoverEvent = ev;
-  this.isMenuOpen = true;
-}
-
-goToMapa() {
-  this.isMenuOpen = false;
-  this.router.navigate(['/mapa']);
-}
-
+  goToMapa() {
+    this.isMenuOpen = false;
+    this.router.navigate(['/mapa']);
+  }
 }

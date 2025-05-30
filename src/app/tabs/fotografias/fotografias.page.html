@@ -21,13 +21,14 @@
 <ion-content [fullscreen]="false" class="ion-padding">
 
   <div class="photo-grid">
-    <img
-      *ngFor="let photo of photos"
-      [src]="photo"
-      (click)="openImage(photo)"
-      alt="Foto da galeria"
-    />
-  </div>
+  <img
+    *ngFor="let photo of photos"
+    [src]="photo.url"              
+    (click)="openImage(photo.url)"
+    alt="Foto da galeria"
+  />
+</div>
+
 
   <div class="fullscreen-overlay" *ngIf="selectedImage" (click)="closeImage()">
     <img [src]="selectedImage" alt="Imagem em fullscreen" (click)="$event.stopPropagation()">
