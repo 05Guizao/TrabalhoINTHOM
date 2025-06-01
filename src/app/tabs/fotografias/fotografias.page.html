@@ -1,0 +1,47 @@
+<ion-header *ngIf="!selectedImage">
+  <ion-toolbar>
+    <ion-title size="medium">Fotografias</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="openMenu($event)">
+        <ion-icon slot="icon-only" name="ellipsis-vertical-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-popover [isOpen]="isMenuOpen" [event]="popoverEvent" (didDismiss)="isMenuOpen = false">
+  <ng-template>
+    <ion-list>
+      <ion-item button (click)="adicionarFoto(); isMenuOpen = false">Adicionar Foto</ion-item>
+      <ion-item button (click)="goToMapa(); isMenuOpen = false">Ir para o Mapa</ion-item>
+    </ion-list>
+  </ng-template>
+</ion-popover>
+
+<ion-content [fullscreen]="false" class="ion-padding">
+
+  <div class="photo-grid">
+  <img
+    *ngFor="let photo of photos"
+    [src]="photo.url"              
+    (click)="openImage(photo.url)"
+    alt="Foto da galeria"
+  />
+</div>
+
+
+  <div class="fullscreen-overlay" *ngIf="selectedImage" (click)="closeImage()">
+    <img [src]="selectedImage" alt="Imagem em fullscreen" (click)="$event.stopPropagation()">
+  
+    <div class="footer" (click)="$event.stopPropagation()">
+      <ion-button fill="clear" color="danger" (click)="confirmarApagar($event)">
+        <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+      </ion-button>
+    </div>
+  </div>
+  
+  
+  
+</ion-content>
+
+

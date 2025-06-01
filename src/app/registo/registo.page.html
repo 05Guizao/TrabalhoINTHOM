@@ -1,0 +1,50 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/login" text="Voltar"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="login-content">
+  <div class="container">
+    <img src="assets/images/logo.png" alt="Logotipo DigitalAllMedia" />
+    <div class="logo-placeholder"></div>
+
+    <h2 class="titulo">Crie a sua nova conta</h2>
+
+    <ion-input
+  placeholder="Nome próprio"
+  [(ngModel)]="nome"
+  class="input-field"
+  fill="outline">
+</ion-input>
+
+<ion-input
+  placeholder="Apelido"
+  [(ngModel)]="apelido"
+  class="input-field"
+  fill="outline">
+</ion-input>
+
+<ion-input
+  placeholder="Digite o seu e-mail"
+  [(ngModel)]="email"
+  type="email"
+  class="input-field"
+  fill="outline">
+</ion-input>
+
+<ion-input
+  placeholder="Digite a sua palavra-passe"
+  [(ngModel)]="pass"
+  type="password"
+  class="input-field"
+  fill="outline">
+</ion-input>
+
+
+    <ion-button expand="block" class="btn-register" (click)="registar()">Criar nova conta</ion-button>
+
+  </div>
+</ion-content>

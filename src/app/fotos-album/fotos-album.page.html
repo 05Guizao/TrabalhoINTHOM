@@ -1,0 +1,42 @@
+<ion-header *ngIf="!selectedImage">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/albuns"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>Fotos do Álbum</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="abrirSeletor()">
+        <ion-icon slot="icon-only" name="add-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="false" class="ion-padding">
+
+  <div class="photo-grid">
+    <div *ngFor="let f of fotos" class="photo-item">
+      <img
+        [src]="f.url"
+        (click)="openImage(f.url)"
+        alt="Foto"
+      />
+      <ion-button fill="clear" color="danger" (click)="confirmarApagar($event, f.id)">
+        <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+      </ion-button>
+    </div>
+  </div>
+
+  <div class="fullscreen-overlay" *ngIf="selectedImage" (click)="closeImage()">
+    <img [src]="selectedImage" alt="Imagem em fullscreen" (click)="$event.stopPropagation()">
+
+    <div class="footer" (click)="$event.stopPropagation()">
+      <ion-button fill="clear" color="danger" (click)="confirmarApagar($event, selectedImage)">
+        <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+      </ion-button>
+    </div>
+  </div>
+
+</ion-content>
