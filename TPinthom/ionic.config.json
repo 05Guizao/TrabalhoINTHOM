@@ -1,7 +1,0 @@
-{
-  "name": "TPinthom",
-  "integrations": {
-    "capacitor": {}
-  },
-  "type": "angular"
-}
